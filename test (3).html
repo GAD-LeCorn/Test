@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ohana Bar Lignano – Online bestellen</title>
+  <style>
+    /* Basis Reset */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #fffaf0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #f15946;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+    }
+    main {
+      flex-grow: 1;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 700px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Kategorien */
+    section.menu-category {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 0 15px rgb(0 0 0 / 0.05);
+    }
+    section.menu-category h2 {
+      margin-top: 0;
+      font-weight: 600;
+      border-bottom: 2px solid #f15946;
+      padding-bottom: 0.5rem;
+      color: #d6453e;
+    }
+
+    /* Menüeintrag */
+    .menu-item {
+      display: flex;
+      margin-bottom: 1.25rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.2s ease;
+      padding: 0.5rem;
+    }
+    .menu-item:hover,
+    .menu-item:focus {
+      background-color: #ffe6de;
+      outline: none;
+    }
+    .menu-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+    .menu-item-content {
+      flex-grow: 1;
+    }
+    .menu-item-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin: 0 0 0.3rem;
+      color: #b53726;
+    }
+    .menu-item-desc {
+      margin: 0 0 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .menu-item-price {
+      font-weight: 700;
+      color: #f15946;
+      font-size: 1rem;
+    }
+
+    /* Warenkorb */
+    .cart {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 0 15px rgb(0 0 0 / 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cart h2 {
+      margin-top: 0;
+      font-weight: 600;
+      border-bottom: 2px solid #f15946;
+      padding-bottom: 0.5rem;
+      color: #d6453e;
+    }
+    .cart-items {
+      flex-grow: 1;
+      overflow-y: auto;
+      max-height: 280px;
+      margin-bottom: 1rem;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+    .cart-item-name {
+      flex: 1;
+      color: #444;
+    }
+    .cart-item-qty {
+      width: 40px;
+      text-align: center;
+      margin-right: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      padding: 2px 5px;
+    }
+    .cart-item-price {
+      font-weight: 700;
+      color: #f15946;
+      min-width: 50px;
+      text-align: right;
+    }
+    .remove-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.1rem;
+      color: #d6453e;
+      cursor: pointer;
+      padding: 0 5px;
+      line-height: 1;
+    }
+    .remove-btn:hover {
+      color: #a13027;
+    }
+    .cart-total {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #d6453e;
+      border-top: 2px solid #f15946;
+      padding-top: 0.8rem;
+      margin-bottom: 1rem;
+      text-align: right;
+    }
+    .cart-empty {
+      color: #999;
+      font-style: italic;
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    /* Formular */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: #444;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      transition: border-color 0.2s ease;
+    }
+    input[type="text"]:focus {
+      border-color: #f15946;
+      outline: none;
+    }
+
+    /* Button */
+    button {
+      background-color: #f15946;
+      color: white;
+      font-weight: 700;
+      font-size: 1.15rem;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+    button:disabled {
+      background-color: #f9b7a7;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled) {
+      background-color: #d6453e;
+    }
+
+    /* Scrollbar (für Warenkorb) */
+    .cart-items::-webkit-scrollbar {
+      width: 8px;
+    }
+    .cart-items::-webkit-scrollbar-thumb {
+      background-color: #f15946;
+      border-radius: 10px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #777;
+      background-color: #fff4f0;
+      margin-top: auto;
+      border-top: 1px solid #f0d6cc;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Ohana Bar Lignano</h1>
+    <p>Leckeres Essen und Getränke bestellen</p>
+  </header>
+
+  <main>
+    <section class="menu-category" aria-label="Essen">
+      <h2>Essen</h2>
+
+      <article class="menu-item" tabindex="0" data-name="Poke Bowl" data-price="10">
+        <img src="https://images.unsplash.com/photo-1562967916-eb82221dfb40?auto=format&fit=crop&w=80&q=80" alt="Poke Bowl" />
+        <div class="menu-item-content">
+          <h3 class="menu-item-title">Poke Bowl</h3>
+          <p class="menu-item-desc">Frischer Fisch, Reis, Avocado & Gemüse</p>
+          <p class="menu-item-price">10 €</p>
+        </div>
+      </article>
+
+      <article class="menu-item" tabindex="0" data-name="Hawaiian Burger" data-price="12">
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=80&q=80" alt="Hawaiian Burger" />
+        <div class="menu-item-content">
+          <h3 class="menu-item-title">Hawaiian Burger</h3>
+          <p class="menu-item-desc">Saftiger Burger mit Ananas & BBQ-Soße</p>
+          <p class="menu-item-price">12 €</p>
+        </div>
+      </article>
+
+      <article class="menu-item" tabindex="0" data-name="Tacos" data-price="8">
+        <img src="https://images.unsplash.com/photo-1552332386-f8dd00dc2f97?auto=format&fit=crop&w=80&q=80" alt="Tacos" />
+        <div class="menu-item-content">
+          <h3 class="menu-item-title">Tacos</h3>
+          <p class="menu-item-desc">Drei Tacos mit Fleisch, Salsa & Käse</p>
+          <p class="menu-item-price">8 €</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="menu-category" aria-label="Getränke">
+      <h2>Getränke</h2>
+
+      <article class="menu-item" tabindex="0" data-name="Tropischer Cocktail" data-price="6">
+        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=80&q=80" alt="Tropischer Cocktail" />
+        <div class="menu-item-content">
+          <h3 class="menu-item-title">Tropischer Cocktail</h3>
+          <p class="menu-item-desc">Fruchtig & erfrischend</p>
+          <p class="menu-item-price">6 €</p>
+        </div>
+      </article>
+
+      <article class="menu-item" tabindex="0" data-name="Hausgemachter Eistee" data-price="4">
+        <img src="https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=80&q=80" alt="Hausgemachter Eistee" />
+        <div class="menu-item-content">
+          <h3 class="menu-item-title">Hausgemachter Eistee</h3>
+          <p class="menu-item-desc">Mit frischer Zitrone</p>
+          <p class="menu-item-price">4 €</p>
+        </div>
+      </article>
+
+      <article class="menu-item" tabindex="0" data-name="Kokoswasser" data-price="3">
+        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=80&q=80" alt="Kokoswasser" />
+        <div class="menu-item-content">
+          <h3 class="menu-item-title">Kokoswasser</h3>
+          <p class="menu-item-desc">Natürlich & gesund</p>
+          <p class="menu-item-price">3 €</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="cart" aria-label="Warenkorb">
+      <h2>Dein Warenkorb</h2>
+      <div class="cart-items" id="cartItems">
+        <p class="cart-empty">Dein Warenkorb ist noch leer.</p>
+      </div>
+      <div class="cart-total" id="cartTotal">Gesamt: 0,00 €</div>
+
+      <form id="orderForm" aria-label="Bestellformular">
+        <label for="tableNumber">Tischnummer <span aria-hidden="true">*</span></label>
+        <input type="text" id="tableNumber" name="tableNumber" placeholder="z.B. 12" pattern="^\d+$" required autocomplete="off" />
+
+        <button type="submit" id="orderBtn" disabled>Bestellung absenden</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Ohana Bar Lignano – Made with ❤️
+  </footer>
+
+  <script>
+    const menuItems = document.querySelectorAll('.menu-item');
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const orderForm = document.getElementById('orderForm');
+    const orderBtn = document.getElementById('orderBtn');
+    const tableInput = document.getElementById('tableNumber');
+
+    // GPS-Check Setup
+    const ALLOWED_RADIUS_METERS = 100;
+    const ohanaLat = 45.4560;
+    const ohanaLng = 13.1340;
+
+    // Haversine-Formel zur Entfernungsmessung
+    function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
+      const R = 6371000; // Erdradius in Metern
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+      ;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    let cart = {};
+
+    function renderCart() {
+      cartItemsContainer.innerHTML = '';
+      const keys = Object.keys(cart);
+      if (keys.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="cart-empty">Dein Warenkorb ist noch leer.</p>';
+        cartTotalEl.textContent = 'Gesamt: 0,00 €';
+        orderBtn.disabled = true;
+        return;
+      }
+
+      let total = 0;
+      keys.forEach(key => {
+        const item = cart[key];
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+
+        div.innerHTML = `
+          <div class="cart-item-name">${item.name}</div>
+          <input type="number" min="1" value="${item.qty}" class="cart-item-qty" aria-label="Anzahl für ${item.name}" />
+          <div class="cart-item-price">${itemTotal.toFixed(2)} €</div>
+          <button aria-label="Artikel entfernen" class="remove-btn" title="Entfernen">✖</button>
+        `;
+
+        div.querySelector('.cart-item-qty').addEventListener('change', e => {
+          const newQty = parseInt(e.target.value);
+          if (newQty < 1 || isNaN(newQty)) {
+            e.target.value = item.qty;
+            return;
+          }
+          cart[key].qty = newQty;
+          renderCart();
+        });
+
+        div.querySelector('.remove-btn').addEventListener('click', () => {
+          delete cart[key];
+          renderCart();
+        });
+
+        cartItemsContainer.appendChild(div);
+      });
+
+      cartTotalEl.textContent = 'Gesamt: ' + total.toFixed(2) + ' €';
+      checkFormValidity();
+    }
+
+    function checkFormValidity() {
+      const hasItems = Object.keys(cart).length > 0;
+      const tableValid = tableInput.validity.valid && tableInput.value.trim() !== '';
+      orderBtn.disabled = !(hasItems && tableValid);
+    }
+
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const name = item.dataset.name;
+        const price = parseFloat(item.dataset.price);
+
+        if (cart[name]) {
+          cart[name].qty += 1;
+        } else {
+          cart[name] = { name, price, qty: 1 };
+        }
+
+        renderCart();
+      });
+
+      item.addEventListener('keypress', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          item.click();
+        }
+      });
+    });
+
+    tableInput.addEventListener('input', () => {
+      checkFormValidity();
+    });
+
+    orderForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      if (Object.keys(cart).length === 0) {
+        alert('Bitte wähle mindestens ein Gericht oder Getränk aus.');
+        return;
+      }
+
+      if (!tableInput.validity.valid || tableInput.value.trim() === '') {
+        alert('Bitte gib eine gültige Tischnummer ein.');
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        alert('Geolocation wird von deinem Browser nicht unterstützt.');
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+          const distance = getDistanceFromLatLonInMeters(userLat, userLng, ohanaLat, ohanaLng);
+
+          if (distance > ALLOWED_RADIUS_METERS) {
+            alert(`Du bist zu weit von der Ohana Bar entfernt (${Math.round(distance)} Meter).\nBestellen ist nur vor Ort möglich.`);
+            return;
+          }
+
+          let orderSummary = 'Bestellung:\n';
+          Object.values(cart).forEach(item => {
+            orderSummary += `${item.qty} x ${item.name} (${(item.price * item.qty).toFixed(2)} €)\n`;
+          });
+          orderSummary += `\nGesamt: ${cartTotalEl.textContent.replace('Gesamt: ', '')}\n`;
+          orderSummary += `Tischnummer: ${tableInput.value.trim()}`;
+
+          alert('Danke für deine Bestellung!\n\n' + orderSummary);
+
+          cart = {};
+          renderCart();
+          orderForm.reset();
+          orderBtn.disabled = true;
+        },
+        error => {
+          alert('Standort konnte nicht ermittelt werden. Bitte erlaube den Zugriff auf deinen Standort.');
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
+
+    renderCart();
+  </script>
+
+</body>
+</html>
